@@ -12,8 +12,30 @@
 
 <input type="button" value="Update Table" class="btn btn-outline-light" onclick="startTimer()" />
 
+<input type="button" value="Show Create" class="btn btn-outline-dark" onclick="showCreateModal()" />
+
 <div id="JokeTableContainer">
     <partial name="_JokeTable.cshtml" />
+</div>
+
+
+
+<div class="modal" id="JokeModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="ModalBody">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -34,4 +56,49 @@
         // overwrite the JokeTableContainer innerHTML with the new data
         document.getElementById('JokeTableContainer').innerHTML = htmlResponse;
     }
+
+    async function showCreateModal(){
+
+        let response = await fetch('/Joke/Create');
+        let htmlResponse = await response.text();
+        document.getElementById('ModalBody').innerHTML = htmlResponse;
+
+        // get a reference to the form
+
+        let formReference = document.querySelector('form[action="/Joke/Create"]')
+
+        console.log(formReference);
+
+        formReference.addEventListener("submit", (e) => { handleCreateSubmit(e) })
+
+        $('#JokeModal').modal('show');
+    }
+
+    async function handleCreateSubmit(e) {
+        e.preventDefault();
+
+        // Extract a JSON object
+
+        let form = e.target;
+
+        let jokeData = {
+            jokeQuestion: form["JokeQuestion"].value,
+            jokeAnswer: form["JokeAnswer"].value
+        };
+
+        // POST the joke to the controller
+        let response = await fetch('/Joke/Create', {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(jokeData)
+        });
+
+        console.log(jokeData);
+
+        $('#JokeModal').modal('hide');
+        
+    }
+
 </script>

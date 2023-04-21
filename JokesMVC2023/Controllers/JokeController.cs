@@ -43,15 +43,15 @@ namespace JokesMVC2023.Controllers
         }
 
         // GET: JokeController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            return PartialView("_CreateJoke");
         }
 
         // POST: JokeController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(JokeCreateDTO jokeCreate)
+        // [ValidateAntiForgeryToken]
+        public ActionResult Create([FromBody]JokeCreateDTO jokeCreate)
         {
             try
             {

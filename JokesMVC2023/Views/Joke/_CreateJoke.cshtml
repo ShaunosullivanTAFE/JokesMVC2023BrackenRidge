@@ -1,15 +1,8 @@
 ﻿@model JokesMVC2023.Models.Data.Joke
 
-@{
-    ViewData["Title"] = "Create";
-}
 
-<h1>Create</h1>
-
-<h4>Joke</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -27,10 +20,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
