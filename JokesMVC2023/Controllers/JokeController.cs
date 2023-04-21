@@ -19,6 +19,16 @@ namespace JokesMVC2023.Controllers
             return View(_jokeContext.Jokes.AsEnumerable());
         }
 
+        [HttpGet]
+        public async Task<ActionResult> JokeTablePartial()
+        {
+            var jokeData = _jokeContext.Jokes.AsEnumerable();
+
+            return PartialView("_JokeTable", jokeData);
+        }
+
+
+
         // GET: JokeController/Details/5
         public ActionResult Details(int id)
         {
