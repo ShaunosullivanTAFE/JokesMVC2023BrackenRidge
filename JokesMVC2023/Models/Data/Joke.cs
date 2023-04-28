@@ -12,8 +12,10 @@ namespace JokesMVC2023.Models.Data
         public int Id { get; set; }
 
         [Display(Name = "Joke Question")]
+        [Required]
+        [StringLength(50)]
         public string JokeQuestion { get; set; }
-        
+
         [Display(Name = "Joke Answer")]
         public string JokeAnswer { get; set; }
     }

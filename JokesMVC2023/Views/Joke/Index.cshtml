@@ -127,6 +127,15 @@
     async function handleCreateSubmit(e) {
         e.preventDefault();
 
+        let button = document.getElementById('btnCreate');
+
+        button.setAttribute('disabled', 'disabled');
+        button.innerHTML = `                    
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Loading...
+          `;
+
+
         // Extract a JSON object
 
         let form = e.target;
@@ -145,12 +154,16 @@
             body: JSON.stringify(jokeData)
         });
 
+        button.removeAttribute('disabled');
+        button.innerHTML = 'Create';
+
         console.log(jokeData);
 
         updateTable();
 
         $('#JokeModal').modal('hide');
-        
+
+
     }
 
 </script>

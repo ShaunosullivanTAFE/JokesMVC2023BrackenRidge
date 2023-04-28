@@ -23,6 +23,7 @@ namespace JokesMVC2023.Controllers
         [HttpGet]
         public async Task<ActionResult> JokeTablePartial()
         {
+            Thread.Sleep(2000);
             var jokeData = _jokeContext.Jokes.AsEnumerable();
 
             return PartialView("_JokeTable", jokeData);
@@ -33,6 +34,7 @@ namespace JokesMVC2023.Controllers
         // GET: JokeController/Details/5
         public ActionResult Details(int id)
         {
+            Thread.Sleep(2000);
             if (id == 0)
             {
                 return RedirectToAction(nameof(Index));
@@ -46,6 +48,7 @@ namespace JokesMVC2023.Controllers
         // GET: JokeController/Create
         public async Task<ActionResult> Create()
         {
+            Thread.Sleep(2000);
             return PartialView("_CreateJoke");
         }
 
@@ -56,6 +59,7 @@ namespace JokesMVC2023.Controllers
         {
             try
             {
+                Thread.Sleep(2000);
                 // simple error handling
                 if (ModelState.IsValid)
                 {
