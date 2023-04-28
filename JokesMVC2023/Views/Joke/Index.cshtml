@@ -10,6 +10,10 @@
     <a asp-action="Create">Create New</a>
 </p>
 
+
+
+<input type="button" value="Show Spinner" class="btn btn-primary" onclick="showSpinner()" />
+
 <input type="button" value="Update Table" class="btn btn-outline-light" onclick="startTimer()" />
 
 <input type="button" value="Show Create" class="btn btn-outline-dark" onclick="showCreateModal()" />
@@ -34,7 +38,26 @@
   </div>
 </div>
 
+<div class="modal" id="SpinnerModal" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center">
+      <div class="spinner-container">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+  </div>
+</div>
+
 <script>
+
+    function showSpinner(){
+      $('#SpinnerModal').modal('show')
+    }
+
+    function hideSpinner(){
+      $('#SpinnerModal').modal('hide')
+    }
 
     async function startTimer(){
         setInterval(async (e) => {
@@ -57,16 +80,21 @@
 
       // Confirm Dialog
       if(confirm("Are you sure you want to delete Joke with ID: " + id)){
+        showSpinner();
         // Fetch Request
         await fetch('/Joke/Delete?id='+id,{method: "DELETE"})
         // Update Table
-        updateTable();
+        await updateTable();
+
+        hideSpinner();
+
       }
 
 
     }
 
     async function showEditModal(id){
+      showSpinner();
       let response = await fetch('/Joke/Edit?id='+id);
       let htmlResponse = await response.text();
 
@@ -78,7 +106,7 @@
       console.log(formReference)
 
       formReference.addEventListener('submit', (e) => { handleEditSubmit(e, id) });
-
+      hideSpinner();
       $('#JokeModal').modal('show');
     }
 
@@ -91,6 +119,9 @@
         // get a reference to the form
 
         let formReference = document.querySelector('form[action="/Joke/Create"]');
+
+        // Parse the validation rules on the individual Input fields
+        $.validator.unobtrusive.parse(formReference);
 
         console.log(formReference);
 
@@ -127,6 +158,11 @@
     async function handleCreateSubmit(e) {
         e.preventDefault();
 
+        let form = $(e.target);
+        if(!form.valid()){
+          return;
+        }
+
         let button = document.getElementById('btnCreate');
 
         button.setAttribute('disabled', 'disabled');
@@ -138,11 +174,13 @@
 
         // Extract a JSON object
 
-        let form = e.target;
+
+
+
 
         let jokeData = {
-            jokeQuestion: form["JokeQuestion"].value,
-            jokeAnswer: form["JokeAnswer"].value
+            jokeQuestion: e.target["JokeQuestion"].value,
+            jokeAnswer: e.target["JokeAnswer"].value
         };
 
         // POST the joke to the controller
@@ -154,16 +192,29 @@
             body: JSON.stringify(jokeData)
         });
 
-        button.removeAttribute('disabled');
-        button.innerHTML = 'Create';
+        if(response.ok){
+          console.log(jokeData);
 
-        console.log(jokeData);
+          updateTable();
 
-        updateTable();
+          $('#JokeModal').modal('hide');
 
-        $('#JokeModal').modal('hide');
+          if(response.status == 201){
+            let joke = await response.json();
+            console.log(joke.id);
+            localStorage.setItem('JokeID', joke.id);
+          }
+        }
+
+          button.removeAttribute('disabled');
+          button.innerHTML = 'Create';
+       
 
 
     }
 
 </script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -55,7 +55,7 @@ namespace JokesMVC2023.Controllers
         // POST: JokeController/Create
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public ActionResult Create([FromBody]JokeCreateDTO jokeCreate)
+        public async Task<ActionResult> Create([FromBody]JokeCreateDTO jokeCreate)
         {
             try
             {
@@ -63,18 +63,24 @@ namespace JokesMVC2023.Controllers
                 // simple error handling
                 if (ModelState.IsValid)
                 {
-                    _jokeContext.Jokes.Add(new Joke { JokeQuestion = jokeCreate.JokeQuestion, JokeAnswer = jokeCreate.JokeAnswer });
-                    _jokeContext.SaveChanges();
-                    return RedirectToAction(nameof(Index));
+
+                    Joke joke = new Joke{
+                        JokeQuestion = jokeCreate.JokeQuestion,
+                        JokeAnswer = jokeCreate.JokeAnswer 
+                    };
+
+                    _jokeContext.Jokes.Add(joke);
+                    await _jokeContext.SaveChangesAsync();
+                    return Created("/Joke/Create", joke);
                 }
                 else
                 {
-                    return View();
+                    return BadRequest("There was an issue processing the provided model");
                 }
             }
             catch
             {
-                return View();
+                return Problem("There was an issue processing your request");
             }
         }
 
@@ -82,6 +88,7 @@ namespace JokesMVC2023.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
+            Thread.Sleep(2000);
             if (id == 0)
             {
                 return RedirectToAction(nameof(Index));
