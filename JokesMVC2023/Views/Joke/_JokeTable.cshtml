@@ -23,10 +23,9 @@
                     @Html.DisplayFor(modelItem => item.JokeAnswer)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <input type="button" value="Edit" class="btn btn-secondary" onclick="showEditModal(@item.Id)" />
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    <input type="button" value="Delete" onclick="confirm('are you sure you want to delete Joke Number: @item.Id')" />
+                    <input type="button" value="Delete" class="btn btn-danger" onclick="deleteConfirm(@item.Id)" />
                 </td>
             </tr>
         }

@@ -24,15 +24,11 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title" id="ModalTitle"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="ModalBody">
         <p>Modal body text goes here.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
@@ -57,21 +53,75 @@
         document.getElementById('JokeTableContainer').innerHTML = htmlResponse;
     }
 
+    async function deleteConfirm(id){
+
+      // Confirm Dialog
+      if(confirm("Are you sure you want to delete Joke with ID: " + id)){
+        // Fetch Request
+        await fetch('/Joke/Delete?id='+id,{method: "DELETE"})
+        // Update Table
+        updateTable();
+      }
+
+
+    }
+
+    async function showEditModal(id){
+      let response = await fetch('/Joke/Edit?id='+id);
+      let htmlResponse = await response.text();
+
+      document.getElementById('ModalBody').innerHTML = htmlResponse;
+      document.getElementById('ModalTitle').innerHTML = "Edit Joke";
+
+      let formReference = document.querySelector('form[action="/Joke/Edit"]');
+
+      console.log(formReference)
+
+      formReference.addEventListener('submit', (e) => { handleEditSubmit(e, id) });
+
+      $('#JokeModal').modal('show');
+    }
+
     async function showCreateModal(){
 
         let response = await fetch('/Joke/Create');
         let htmlResponse = await response.text();
         document.getElementById('ModalBody').innerHTML = htmlResponse;
-
+        document.getElementById('ModalTitle').innerHTML = "Create Joke";
         // get a reference to the form
 
-        let formReference = document.querySelector('form[action="/Joke/Create"]')
+        let formReference = document.querySelector('form[action="/Joke/Create"]');
 
         console.log(formReference);
 
-        formReference.addEventListener("submit", (e) => { handleCreateSubmit(e) })
+        formReference.addEventListener("submit", (e) => { handleCreateSubmit(e) });
 
         $('#JokeModal').modal('show');
+    }
+
+    async function handleEditSubmit(e, id){
+        e.preventDefault();
+
+        let form = e.target;
+
+        let jokeData = {
+          id: id,
+          jokeQuestion: form["JokeQuestion"].value,
+          jokeAnswer: form["JokeAnswer"].value
+        };
+
+        let response = await fetch('/Joke/Edit?id='+id, {
+          method: 'PUT',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(jokeData)
+        });
+
+        updateTable();
+
+        $('#JokeModal').modal('hide');
+
     }
 
     async function handleCreateSubmit(e) {
@@ -96,6 +146,8 @@
         });
 
         console.log(jokeData);
+
+        updateTable();
 
         $('#JokeModal').modal('hide');
         
