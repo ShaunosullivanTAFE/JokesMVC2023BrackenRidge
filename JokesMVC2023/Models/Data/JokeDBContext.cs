@@ -16,10 +16,29 @@ namespace JokesMVC2023.Models.Data
         }
 
         public DbSet<Joke> Jokes { get; set; }
+        public DbSet<AppUser> Users { get; set; }
+        public DbSet<FavouriteList> FavouriteLists { get; set; }
+        public DbSet<FavouriteListItem> FavouriteListItems { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<FavouriteListItem>()
+                .HasOne(fli => fli.FavouriteList)
+                .WithMany(fl => fl.FavouriteListItems)
+                .HasForeignKey(fli => fli.FavouriteListId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<FavouriteListItem>()
+                .HasOne(fli => fli.Joke)
+                .WithMany(j => j.FavouriteListItems)
+                .HasForeignKey(fli => fli.JokeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+
 
             builder.Entity<Joke>().HasData(
                 new Joke { Id = 1, JokeQuestion = "What do you get if you lock a monkey in a room with a typewriter for 8 hours?", JokeAnswer = "A regular expression." },

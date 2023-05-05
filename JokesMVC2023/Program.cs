@@ -12,7 +12,8 @@ internal class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddDbContext<JokeDBContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("JokesDBSQL")));
 
-
+        builder.Services.AddSession();
+        builder.Services.AddDistributedMemoryCache();
 
 
         var app = builder.Build();
@@ -30,7 +31,7 @@ internal class Program
         app.UseStaticFiles();
 
         app.UseRouting();
-
+        app.UseSession();
         app.UseAuthorization();
 
         app.MapControllerRoute(

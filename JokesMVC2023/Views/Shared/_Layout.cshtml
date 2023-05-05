@@ -28,7 +28,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Joke" asp-action="Index">Jokes</a>
                         </li>
+
                     </ul>
+                    @if (!String.IsNullOrWhiteSpace(Context?.Session?.GetString("Email")))
+                    {
+                        <div class="me-3">@Context.Session.GetString("Email")</div>
+                    }
+                    <a asp-action="Login" class="btn btn-success me-3">Login</a>
+                    <a asp-action="Register" class="btn btn-primary me-3">Register</a>
+                    <a asp-action="Logout" class="btn btn-warning">Logout</a>
                 </div>
             </div>
         </nav>

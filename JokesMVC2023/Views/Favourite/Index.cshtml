@@ -1,0 +1,42 @@
+﻿
+
+<div style="min-height: 65vh">
+
+    <div class="text-center m-2 mb-4">
+        <h2>Favourite List</h2>
+    </div>
+
+    <div class="card shadow py-2">
+        <div class="row m-0 justify-content-evenly">
+            <div class="col-sm-2 p-1">
+                <input type="button" style="width:100%" class="btn btn-primary" value="Edit" />
+            </div>
+            <div class="col-sm-6 p-1" id="selectContainer">
+                <select class="form-select" disabled>
+                    <option>Loading.....</option>
+                </select>
+            </div>
+            <div class="col-sm-2 p-1">
+                <input type="button" style="width:100%" class="btn btn-primary" value="Add" />
+            </div>
+        </div>
+    </div>
+
+    <div></div>
+
+</div>
+
+
+<script>
+    window.addEventListener("load", async (e) => {
+         updateDDL()
+    });
+
+    async function updateDDL(){
+        let result = await fetch('/Favourite/FavouriteListDDL');
+        let htmlResult = await result.text();
+        document.getElementById('selectContainer').innerHTML = htmlResult;
+    }
+
+
+</script>
