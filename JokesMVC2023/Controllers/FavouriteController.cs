@@ -58,5 +58,80 @@ namespace JokesMVC2023.Controllers
 
             return PartialView("_FavouriteListDDL");
         }
+
+        // Add New List 
+        [HttpPost]
+        public async Task<IActionResult> AddNewList([FromBody] string listName)
+        {
+
+            // retrieve ID from session
+            string id = HttpContext?.Session?.GetString("ID");
+
+            if (!int.TryParse(id, out int userID))
+            {
+                return Unauthorized();
+            }
+
+            if (_context.FavouriteLists.Any(c => c.Name == listName && c.UserId == userID))
+            {
+                return BadRequest();
+            }
+
+            FavouriteList newList = new FavouriteList()
+            {
+                Name = listName,
+                UserId = userID
+            };
+            _context.FavouriteLists.Add(newList);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+
+        // Get Jokes For List
+        public async Task<IActionResult> GetJokesForList([FromQuery] int listID)
+        {
+
+
+            List<Joke> jokes = _context.FavouriteListItems.Include(c => c.Joke)
+                                                                 .Where(c => c.FavouriteListId == listID)
+                                                                 .Select(c => c.Joke)
+                                                                 .ToList();
+
+
+
+            return PartialView("_JokesForListPartial", jokes);
+        }
+
+        // Remove Joke From List
+        [HttpDelete]
+        public async Task<IActionResult> RemoveJokeFromList([FromBody] FavouriteListItem item)
+        {
+            var favListItem = _context.FavouriteListItems.Where(c => c.FavouriteListId == item.FavouriteListId && c.JokeId == item.JokeId)
+                                                         .FirstOrDefault();
+
+            if (favListItem != null)
+            {
+                _context.FavouriteListItems.Remove(favListItem);
+                _context.SaveChanges();
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        // Add Joke To List
+        [HttpPost]
+        public async Task<IActionResult> AddJokeToList([FromBody] FavouriteListItem item)
+        {
+            if (_context.FavouriteListItems.Any(c => c.FavouriteListId == item.FavouriteListId && c.JokeId == item.JokeId))
+            {
+                return BadRequest();
+            }
+
+            _context.FavouriteListItems.Add(item);
+            _context.SaveChanges();
+            return Ok();
+        }
     }
 }
