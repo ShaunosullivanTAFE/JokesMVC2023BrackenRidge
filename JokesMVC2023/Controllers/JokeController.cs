@@ -54,11 +54,12 @@ namespace JokesMVC2023.Controllers
 
         // POST: JokeController/Create
         [HttpPost]
-        // [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([FromBody]JokeCreateDTO jokeCreate)
         {
             try
             {
+                var test = HttpContext.Request;
                 Thread.Sleep(2000);
                 // simple error handling
                 if (ModelState.IsValid)
@@ -101,7 +102,7 @@ namespace JokesMVC2023.Controllers
 
         // POST: JokeController/Edit/5
         [HttpPut]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([FromQuery]int id, [FromBody]Joke joke)
         {
             //if (id != joke.Id)
