@@ -9,15 +9,24 @@ namespace JokesMVC2023.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly JokeDBContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, JokeDBContext context)
+        public HomeController(ILogger<HomeController> logger, JokeDBContext context, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
         {
+            if (_webHostEnvironment.IsDevelopment())
+            {
+                if (HttpContext.Session.Get("ID") == null)
+                {
+                    HttpContext.Session.SetString("ID", "1");
+                }
+            }
             return View();
         }
 
