@@ -26,6 +26,7 @@
                     <input type="button" value="Edit" class="btn btn-secondary" onclick="showEditModal(@item.Id)" />
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <input type="button" value="Delete" class="btn btn-danger" onclick="deleteConfirm(@item.Id)" />
+                    <input type="button" class="btn btn-outline-warning" value="★" onclick="addToFavourites(@item.Id)" />
                 </td>
             </tr>
         }
