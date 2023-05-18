@@ -77,6 +77,8 @@
     </div>
 </div>
 
+@Html.AntiForgeryToken();
+
 <script>
 
     window.addEventListener('load', (e) => {
@@ -147,7 +149,7 @@
 
     async function updateTable(){
         // Send a GET request to the /Joke/JokeTablePartial endpoint
-        let response = await fetch('/Joke/JokeTablePartial');
+        let response = await advFetch('/Joke/JokeTablePartial');
 
         // Parse the results as text
         let htmlResponse = await response.text();
@@ -162,7 +164,7 @@
       if(confirm("Are you sure you want to delete Joke with ID: " + id)){
         showSpinner();
         // Fetch Request
-        await fetch('/Joke/Delete?id='+id,{method: "DELETE"})
+        await advFetch('/Joke/Delete?id='+id,{method: "DELETE"})
         // Update Table
         await updateTable();
 
@@ -175,7 +177,7 @@
 
     async function showEditModal(id){
       showSpinner();
-      let response = await fetch('/Joke/Edit?id='+id);
+      let response = await advFetch('/Joke/Edit?id='+id);
       let htmlResponse = await response.text();
 
       document.getElementById('ModalBody').innerHTML = htmlResponse;
@@ -192,7 +194,7 @@
 
     async function showCreateModal(){
 
-        let response = await fetch('/Joke/Create');
+        let response = await advFetch('/Joke/Create');
         let htmlResponse = await response.text();
         document.getElementById('ModalBody').innerHTML = htmlResponse;
         document.getElementById('ModalTitle').innerHTML = "Create Joke";
@@ -221,7 +223,7 @@
           jokeAnswer: form["JokeAnswer"].value
         };
 
-        let response = await fetch('/Joke/Edit?id='+id, {
+        let response = await advFetch('/Joke/Edit?id='+id, {
           method: 'PUT',
           headers: {
             'content-type': 'application/json'
@@ -263,8 +265,10 @@
             jokeAnswer: e.target["JokeAnswer"].value
         };
 
+
+
         // POST the joke to the controller
-        let response = await fetch('/Joke/Create', {
+        let response = await advFetch('/Joke/Create', {
             method: "POST",
             headers: {
                 'content-type': 'application/json'
