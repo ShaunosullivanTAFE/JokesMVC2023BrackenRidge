@@ -9,7 +9,7 @@
     <div class="card shadow py-2">
         <div class="row m-0 justify-content-evenly">
             <div class="col-sm-2 p-1">
-                <input type="button" style="width:100%" class="btn btn-primary" value="Edit" />
+                <input type="button" style="width:100%" class="btn btn-primary" value="Edit" onclick="showEditListModal()" />
             </div>
             <div class="col-sm-6 p-1" id="selectContainer">
                 <select class="form-select" disabled>
@@ -50,13 +50,98 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="editListModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title">Edit List</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="row">
+                    <input type="text" id="searchBar" class="form-control" />
+                </div>
+                <div class="row border rounded p-1" id="jokeListContainer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     window.addEventListener("load", async (e) => {
          updateDDL()
         document.getElementById("createListForm").addEventListener('submit', async (e) => {
             await handleCreateList(e);
         })
+
+        document.getElementById("searchBar").addEventListener('input', async (e) => {
+            await handleSearch(e);
+        })
     });
+
+    async function showEditListModal(){
+        // show the edit modal
+        $('#editListModal').modal('show');
+
+        // get a list of all jokes and update the jokeList (potentially update with getting all not-added jokes)
+        await updateEditListTable();
+
+
+
+    }
+
+    async function addJokeToList(jokeId) {
+
+        let listID = sessionStorage.getItem('listID');
+
+        if (listID == 0) { return; }
+
+        let favListItem = {
+            FavouriteListId: listID,
+            JokeId: jokeId
+        }
+
+        console.log(favListItem)
+
+        let result = await fetch('/Favourite/AddJokeToList', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(favListItem)
+        });
+
+        if (result.status == 400) {
+            console.log(result)
+            alert('The selected list already contains this joke')
+            return;
+        } else if (result.ok) {
+            await updateJokeListTable(listID);
+        }
+
+    }
+
+    async function handleSearch(e){
+        let query = e.target.value;
+        updateEditListTable(query)
+    }
+
+    async function updateEditListTable(query){
+
+        let url = '/Favourite/JokesForEdit'
+        if(query){
+            url = url + '?query=' + query
+        }
+
+        let result = await fetch(url);
+        let htmlResult = await result.text();
+        document.getElementById('jokeListContainer').innerHTML = htmlResult
+
+    }
 
     async function updateDDL(){
         let result = await fetch('/Favourite/FavouriteListDDL');
@@ -76,7 +161,12 @@
         sessionStorage.setItem('listID', selectedOption.value)
         sessionStorage.setItem('listName', selectedOption.text)
 
-        let result = await fetch('/Favourite/GetJokesForList?listID=' + selectedOption.value);
+
+        await updateJokeListTable(selectedOption.value)
+    }
+
+    async function updateJokeListTable(listID){
+        let result = await fetch('/Favourite/GetJokesForList?listID=' + listID);
         let htmlResult = await result.text();
         document.getElementById('jokeContainer').innerHTML = htmlResult
     }

@@ -104,6 +104,17 @@ namespace JokesMVC2023.Controllers
             return PartialView("_JokesForListPartial", jokes);
         }
 
+        public async Task<IActionResult> JokesForEdit(string? query = null)
+        {
+            if (!String.IsNullOrEmpty(query))
+            {
+                return PartialView("_JokesForEditListPartial", await _context.Jokes.Where(c => c.JokeQuestion.Contains(query) || c.JokeAnswer.Contains(query)).ToListAsync());
+
+            }
+
+            return PartialView("_JokesForEditListPartial", await _context.Jokes.ToListAsync());
+        }
+
         // Remove Joke From List
         [HttpDelete]
         public async Task<IActionResult> RemoveJokeFromList([FromBody] FavouriteListItem item)
