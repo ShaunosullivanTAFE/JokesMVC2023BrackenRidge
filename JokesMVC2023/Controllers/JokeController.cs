@@ -21,8 +21,16 @@ namespace JokesMVC2023.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> JokeTablePartial()
+        public async Task<ActionResult> JokeTablePartial(string query = "")
         {
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                var filteredJokeData = _jokeContext.Jokes.Where(c => c.JokeQuestion.Contains(query) || c.JokeAnswer.Contains(query)).AsEnumerable();
+                return PartialView("_JokeTable", filteredJokeData);
+
+            }
+
             Thread.Sleep(2000);
             var jokeData = _jokeContext.Jokes.AsEnumerable();
 

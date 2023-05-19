@@ -11,10 +11,15 @@
 </p>
 
 
+<div class="border shadow rounded p-2 m-4 row">
+    <div class="col-10">
+        <input type="text" class="form-control" id="jokeSearch" placeholder="Search on Joke Question or Answer" />
+    </div>
+    <div class="col text-center">
+        <input type="button" class="btn btn-primary" value="Search" id="btnSearch" />
+    </div>
+</div>
 
-<input type="button" value="Show Spinner" class="btn btn-primary" onclick="showSpinner()" />
-
-<input type="button" value="Update Table" class="btn btn-outline-light" onclick="startTimer()" />
 
 <input type="button" value="Show Create" class="btn btn-outline-dark" onclick="showCreateModal()" />
 
@@ -85,7 +90,27 @@
         document.getElementById('addJokeToListForm').addEventListener('submit', async (e) => {
             handleAddJokeToList(e);
         })
+
+        document.getElementById('jokeSearch').addEventListener('keyup', async (e) => {
+            if(e.keyCode == 13){
+                updateTableForFilter(e.target.value)
+            }
+        })
+
+        document.getElementById('btnSearch').addEventListener('click', async (e) => {
+
+            updateTableForFilter(document.getElementById('jokeSearch').value)
+
+        })
     })
+
+    async function updateTableForSearch(query){
+
+        // send a request to the Server with the query
+
+        // Update the table based on the results
+
+    }
 
     async function addToFavourites(jokeId) {
 
@@ -150,6 +175,17 @@
     async function updateTable(){
         // Send a GET request to the /Joke/JokeTablePartial endpoint
         let response = await advFetch('/Joke/JokeTablePartial');
+
+        // Parse the results as text
+        let htmlResponse = await response.text();
+
+        // overwrite the JokeTableContainer innerHTML with the new data
+        document.getElementById('JokeTableContainer').innerHTML = htmlResponse;
+    }
+
+    async function updateTableForFilter(query){
+        // Send a GET request to the /Joke/JokeTablePartial endpoint
+        let response = await advFetch('/Joke/JokeTablePartial?query=' + query);
 
         // Parse the results as text
         let htmlResponse = await response.text();
