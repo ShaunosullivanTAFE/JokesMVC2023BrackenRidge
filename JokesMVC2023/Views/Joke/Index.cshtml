@@ -6,9 +6,16 @@
 
 <h1>Index</h1>
 
+<input type="button" value="Toast Success" onclick="showToast('This is an success toast', 'success')" />
+<input type="button" value="Toast Error" onclick="showToast('This is an error toast', 'error')" />
+<input type="button" value="Toast Default" onclick="showToast('This is a default toast')" />
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+
+
 
 
 <div class="border shadow rounded p-2 m-4 row">
@@ -200,7 +207,14 @@
       if(confirm("Are you sure you want to delete Joke with ID: " + id)){
         showSpinner();
         // Fetch Request
-        await advFetch('/Joke/Delete?id='+id,{method: "DELETE"})
+        let result = await advFetch('/Joke/Delete?id='+id,{method: "DELETE"})
+
+        if(result.ok){
+            showToast('Joke Deleted Successfully', 'success')
+        } else{
+            let text = await result.text();
+            showToast(text, 'error')
+        }
         // Update Table
         await updateTable();
 
@@ -319,11 +333,18 @@
 
           $('#JokeModal').modal('hide');
 
+
           if(response.status == 201){
             let joke = await response.json();
             console.log(joke.id);
+            showToast('Joke Created!', 'success')
             localStorage.setItem('JokeID', joke.id);
           }
+
+          
+        } else{
+            let text = await response.text();
+            showToast(text, 'error')
         }
 
           button.removeAttribute('disabled');

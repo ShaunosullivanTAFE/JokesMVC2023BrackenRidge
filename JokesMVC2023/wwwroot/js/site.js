@@ -31,3 +31,32 @@ function advFetch(url, options) {
     return promise;
 
 }
+
+function showToast(text, type) {
+
+    let backgroundColour;
+
+    switch (type) {
+        case 'success':
+            backgroundColour = "linear-gradient(to right, #11b816, #68ed6c)"
+            break;
+        case 'error':
+            backgroundColour = "linear-gradient(to right, #ab1f07, #cc6516)"
+            break;
+        default:
+            backgroundColour = "linear-gradient(to right, #0f55d6, #4b97d1)"
+            break;
+    }
+
+    Toastify({
+        text: text,
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        style: {
+            background: backgroundColour,
+        }
+    }).showToast();
+
+}

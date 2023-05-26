@@ -17,7 +17,7 @@
                 </select>
             </div>
             <div class="col-sm-2 p-1">
-                <input type="button" class="btn btn-primary w-100" value="+" onclick="$('#createListModal').modal('show')" />
+                <input type="button" class="btn btn-primary w-100" value="+" id="btnShowCreateModal" />
             </div>
         </div>
     </div>
@@ -50,82 +50,6 @@
     </div>
 </div>
 
-<script>
-    window.addEventListener("load", async (e) => {
-         updateDDL()
-        document.getElementById("createListForm").addEventListener('submit', async (e) => {
-            await handleCreateList(e);
-        })
-    });
-
-    async function updateDDL(){
-        let result = await fetch('/Favourite/FavouriteListDDL');
-        let htmlResult = await result.text();
-        document.getElementById('selectContainer').innerHTML = htmlResult;
-
-        let ddlContainer = document.getElementById('selectContainer');
-        let ddl = ddlContainer.querySelector('select');
-        ddl.addEventListener('change', async (e) => {
-            handleDDLChange(e);
-        })
-
-    }
-
-    async function handleDDLChange(e){
-        let selectedOption = e.target.selectedOptions[0]
-        sessionStorage.setItem('listID', selectedOption.value)
-        sessionStorage.setItem('listName', selectedOption.text)
-
-        let result = await fetch('/Favourite/GetJokesForList?listID=' + selectedOption.value);
-        let htmlResult = await result.text();
-        document.getElementById('jokeContainer').innerHTML = htmlResult
-    }
-
-    async function handleCreateList(e) {
-        e.preventDefault();
-
-        console.log(e.target["listName"].value);
-
-        let result = await fetch('/Favourite/AddNewList', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(e.target["listName"].value)
-        });
-
-        if (result.ok) {
-            await updateDDL();
-            $('#createListModal').modal('hide');
-        }
-
-    }
-
-     async function removeJoke(jokeId){
-        let listID = sessionStorage.getItem("listID");
-
-        let favListItem = {
-            FavouriteListId: listID,
-            JokeId: jokeId
-        }
-
-        let result = await fetch('/Favourite/RemoveJokeFromList', {
-            method: 'DELETE',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(favListItem)
-        });
-        if(result.ok){
-            // Update Joke Table
-
-            let result = await fetch('/Favourite/GetJokesForList?listID=' + listID);
-            let htmlResult = await result.text();
-            document.getElementById('jokeContainer').innerHTML = htmlResult
-        }
-
-        console.log(favListItem);
-    }
-
-
-</script>
+@section Scripts {
+    <script src="~/js/favourite.js"></script>
+}

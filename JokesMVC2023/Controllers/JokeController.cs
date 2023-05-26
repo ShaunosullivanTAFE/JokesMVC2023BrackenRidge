@@ -80,6 +80,8 @@ namespace JokesMVC2023.Controllers
 
                     _jokeContext.Jokes.Add(joke);
                     await _jokeContext.SaveChangesAsync();
+
+                    //return BadRequest("There was an issue creating the joke");
                     return Created("/Joke/Create", joke);
                 }
                 else
@@ -139,13 +141,13 @@ namespace JokesMVC2023.Controllers
                 {
                     _jokeContext.Jokes.Remove(joke);
                     await _jokeContext.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return NoContent();
                 }
-                return View();
+                return BadRequest("Joke was not found");
             }
             catch
             {
-                return View();
+                return Problem("There was an issue completing your request");
             }
         }
     }

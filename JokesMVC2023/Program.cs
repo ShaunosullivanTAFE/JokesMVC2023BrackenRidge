@@ -28,6 +28,13 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
+
+        app.Use(async (context, next) =>
+        {
+            context.Response.Headers.Add("X-Frame-Options", "ALLOW-FROM www.youtube.com");
+            await next(context);
+        });
+
         app.UseStaticFiles();
 
         app.UseRouting();
