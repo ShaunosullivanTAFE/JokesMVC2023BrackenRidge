@@ -3,22 +3,28 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
-
-<input type="button" value="Toast Success" onclick="showToast('This is an success toast', 'success')" />
-<input type="button" value="Toast Error" onclick="showToast('This is an error toast', 'error')" />
-<input type="button" value="Toast Default" onclick="showToast('This is a default toast')" />
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="row text-center my-4">
+    <h1>Index</h1>
+</div>
 
 
+<div class="row glass-container mx-4 p-2 justify-content-evenly">
+    <div class="col-2">
+        <input type="button" class="btn btn-outline-light" value="Toast Success" onclick="showToast('This is an success toast', 'success')" />
+    </div>
+    <div class="col-2">
+        <input type="button" class="btn btn-outline-light" value="Toast Error" onclick="showToast('This is an error toast', 'error')" />
+    </div>
+    <div class="col-2">
+        <input type="button" class="btn btn-outline-light" value="Toast Default" onclick="showToast('This is a default toast')" />
+    </div>
+</div>
 
 
 
-<div class="border shadow rounded p-2 m-4 row">
+
+
+<div class="border shadow rounded p-2 m-4 row glass-container">
     <div class="col-10">
         <input type="text" class="form-control" id="jokeSearch" placeholder="Search on Joke Question or Answer" />
     </div>
@@ -27,10 +33,12 @@
     </div>
 </div>
 
+<div class="row m-4 px-4 py-2 glass-container">
+    <input type="button" value="Show Create" class="btn btn-outline-dark w-100" onclick="showCreateModal()" />
+</div>
 
-<input type="button" value="Show Create" class="btn btn-outline-dark" onclick="showCreateModal()" />
 
-<div id="JokeTableContainer">
+<div id="JokeTableContainer" class="glass-container p-2">
     <partial name="_JokeTable.cshtml" />
 </div>
 
@@ -38,7 +46,7 @@
 
 <div class="modal" id="JokeModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
+        <div class="modal-content glass-container">
       <div class="modal-header">
         <h5 class="modal-title" id="ModalTitle"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -63,7 +71,7 @@
 
 <div class="modal fade" id="addJokeToListModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content glass-container">
             <div class="modal-header">
 
                 <h5 class="modal-title">Add Joke To List</h5>

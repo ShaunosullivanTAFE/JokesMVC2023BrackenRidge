@@ -1,34 +1,32 @@
 ﻿@model IEnumerable<JokesMVC2023.Models.Data.Joke>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.JokeQuestion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JokeAnswer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.JokeQuestion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.JokeAnswer)
-                </td>
-                <td>
+
+@foreach (var item in Model)
+{
+    <div class="row m-2 p-2 glass-container">
+        <div class="col">
+            @Html.DisplayFor(modelItem => item.JokeQuestion)
+        </div>
+        <div class="col">
+            @Html.DisplayFor(modelItem => item.JokeQuestion)
+        </div>
+        <div class="col-md-3">
+            <div class="row justify-content-between">
+                <div class="col-md-3">
                     <input type="button" value="Edit" class="btn btn-secondary" onclick="showEditModal(@item.Id)" />
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+
+                </div>
+                <div class="col-md-3">
                     <input type="button" value="Delete" class="btn btn-danger" onclick="deleteConfirm(@item.Id)" />
+
+                </div>
+                <div class="col-md-3">
                     <input type="button" class="btn btn-outline-warning" value="★" onclick="addToFavourites(@item.Id)" />
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+

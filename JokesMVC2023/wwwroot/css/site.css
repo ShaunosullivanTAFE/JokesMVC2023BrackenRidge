@@ -14,7 +14,8 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background: linear-gradient(90deg, rgba(53,198,50,1) 0%, rgba(9,121,81,1) 44%, rgba(0,212,255,1) 100%);
 }
 
 /* The following styling was created by terenceodonoghue @ uiverse.io */
@@ -79,4 +80,29 @@ body {
   to {
     transform: translate(-50%, -50%) rotate(360deg);
   }
+}
+
+.glass-container {
+    background: rgba( 255, 255, 255, 0.25 ) !important;
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ) !important;
+    backdrop-filter: blur( 4px ) !important;
+    -webkit-backdrop-filter: blur( 4px ) !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba( 255, 255, 255, 0.18 ) !important;
+}
+
+.glass-hazy-container {
+    background: rgba( 255, 255, 255, 0.5 ) !important;
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ) !important;
+    backdrop-filter: blur( 4px ) !important;
+    -webkit-backdrop-filter: blur( 4px ) !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba( 255, 255, 255, 0.18 ) !important;
+}
+.glass-header-container {
+    background: rgba( 255, 255, 255, 0.25 ) !important;
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ) !important;
+    backdrop-filter: blur( 4px ) !important;
+    -webkit-backdrop-filter: blur( 4px ) !important;
+    border: 1px solid rgba( 255, 255, 255, 0.18 ) !important;
 }
