@@ -1,5 +1,7 @@
 
 using JokesMVC2023.Models.Data;
+using JokesMVC2023.Services.Concrete;
+using JokesMVC2023.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 internal class Program
@@ -11,6 +13,8 @@ internal class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
         builder.Services.AddDbContext<JokeDBContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("JokesDBSQL")));
+
+        builder.Services.AddScoped<IJokeService, JokeService>();
 
         builder.Services.AddSession();
         builder.Services.AddDistributedMemoryCache();
