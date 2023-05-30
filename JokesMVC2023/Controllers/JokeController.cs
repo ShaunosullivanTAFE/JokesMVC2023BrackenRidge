@@ -102,8 +102,8 @@ namespace JokesMVC2023.Controllers
             try
             {
                 var result = await _jokeService.DeleteJoke(id);
-                
-                return result ? Ok("Joke Deleted") : BadRequest("There was an issue deleting the joke")            
+
+                return result ? Ok("Joke Deleted") : BadRequest("There was an issue deleting the joke");            
             }
             catch
             {

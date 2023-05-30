@@ -13,7 +13,7 @@ namespace JokesMVC2023.Models.Data
 
         [Display(Name = "Joke Question")]
         [Required]
-        [StringLength(500)]
+        [StringLength(50)]
         public string JokeQuestion { get; set; }
 
         [Display(Name = "Joke Answer")]

@@ -51,7 +51,8 @@ namespace JokesMVC2023.Services.Concrete
                 return await GetAllJokes();
             }
 
-            var jokes = _dbContext.Jokes.Where(c => c.JokeQuestion.Contains(filter) || c.JokeAnswer.Contains(filter)).AsNoTracking().AsEnumerable();
+            var jokes = _dbContext.Jokes.Where(c => c.JokeQuestion.ToLower().Contains(filter.ToLower()) 
+            || c.JokeAnswer.ToLower().Contains(filter.ToLower())).AsNoTracking().AsEnumerable();
             return jokes;
         }
 
@@ -81,14 +82,22 @@ namespace JokesMVC2023.Services.Concrete
         /// <returns>true if the operation succeeded, false otherwise</returns>
         public async Task<bool> UpdateJoke(Joke updatedJoke)
         {
-            if(updatedJoke == null || updatedJoke.Id <= 0)
+            try
+            {
+                if (updatedJoke == null || updatedJoke.Id <= 0)
+                {
+                    return false;
+                }
+
+                _dbContext.Jokes.Update(updatedJoke);
+                var result = await _dbContext.SaveChangesAsync();
+                return result == 1 ? true : false;
+            }
+            catch (Exception e)
             {
                 return false;
             }
-
-            _dbContext.Jokes.Update(updatedJoke);
-            var result = await _dbContext.SaveChangesAsync();
-            return result == 1 ? true : false;
+            
         }
     }
 }
